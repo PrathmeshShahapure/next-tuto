@@ -1,6 +1,10 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z } from "zod"
 
-const userSchema = z.object({
+const userFormSchema = z.object({
   name: z.string(),
   email: z.string().email(),
   age: z.number().min(16).optional(),
@@ -9,37 +13,10 @@ const userSchema = z.object({
   settings: z.object({ isOn:z.boolean(),metalName:z.string()})
 })
 
-
+type userForm = z.infer<typeof userFormSchema>
 
 export default function Home() {
- 
-  type Users = z.infer<typeof userSchema>
-  
-   const user1:Users = {
-    name: "Prathmesh",
-    email: "prath@ga.co",
-    age: 20,
-    profileUrl: "http://prathlive",
-    friends: ["Prathmesh", "Pratik"],
-    settings: {isOn:false,metalName:"iron_721"}
-  }
-
-  const user2 = {
-    name: "Prathmesh",
-    email: "prath@ga.co",
-    age: 20,
-    profileUrl: "http://prathlive",
-    friends: ["Prathmesh", "Pratik"],
-    settings: {isOn:false,metalName:"iron_721"}
-  }
-  
-    const InvalidUser = {
-  name:1
-}
-console.log(userSchema.parse(user1));
-console.log(userSchema.parse(user2));
-console.log(userSchema.safeParse(InvalidUser));
-
+  const form = useForm<userForm>({resolver:zodResolver(userFormSchema)});
   return (<>
   <h1 className="mt-5 text-2xl text-center">   PhotosGram</h1>
   
